@@ -79,9 +79,9 @@ func runSpeedTest() (*speedtest.Server, error) {
 // Publishes a MQTT Message to the provided topic. The complete speedtest.Server
 // struct is published.
 func publishSpeedTest(client mqtt.Client, topic string, server *speedtest.Server) {
-	if server.CheckResultValid() {
-		panic(errors.New("speedtest result is invalid"))
-	}
+	// if server.CheckResultValid() {
+	// 	panic(errors.New("speedtest result is invalid"))
+	// }
 
 	message, _ := json.Marshal(server)
 	if token := client.Publish(topic, 0, false, string(message)); token.Wait() && token.Error() != nil {

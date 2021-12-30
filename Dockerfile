@@ -1,9 +1,11 @@
-FROM --platform=$BUILDPLATFORM golang:alpine as app-builder
+FROM golang:alpine as app-builder
+ARG TARGETOS
+ARG TARGETARCH
 WORKDIR /go/src/app
 COPY . .
 # Static build required so that we can safely copy the binary over.
 # `-tags timetzdata` embeds zone info from the "time/tzdata" package.
-RUN CGO_ENABLED=0 go install -ldflags '-extldflags "-static"' -tags timetzdata
+RUN CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH go install -ldflags '-extldflags "-static"' -tags timetzdata
 
 FROM --platform=$BUILDPLATFORM scratch
 # the test program:
